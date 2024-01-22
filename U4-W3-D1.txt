@@ -1,0 +1,110 @@
+ES.1
+
+SELECT * FROM clienti WHERE nome = 'Marioe'
+
+ES.2
+
+SELECT * FROM clienti WHERE anno_nascita = 1982
+
+ES.3
+
+SELECT COUNT(*) FROM fatture WHERE iva = 20
+
+ES.4
+
+SELECT * FROM prodotti 
+WHERE  EXTRACT(YEAR FROM data_attivazione) = 2017
+AND (in_produzione = true OR in_commercio = true)
+
+ES.5
+
+SELECT * FROM fatture
+JOIN clienti ON (clienti.pk_numero_cliente = fatture.fk_id_cliente)
+WHERE CAST(fatture.importo as NUMERIC) < '1000' /* CAST perchè ho il valore di importo come "MONEY"*/
+
+
+ES.6
+
+SELECT fatture.*, fornitori.denominazione FROM fatture
+JOIN fornitori ON (fatture.fk_numero_fornitore = fornitori.pk_numero_fornitore)
+
+ES.7
+
+SELECT EXTRACT(YEAR FROM data_fattura) as anno, 
+COUNT(*) as contatore
+FROM fatture 
+WHERE iva = 20	
+GROUP BY EXTRACT(YEAR FROM data_fattura)
+
+ES.8
+
+SELECT EXTRACT(YEAR FROM data_fattura) as anno, COUNT(*) as numero_fatture,
+SUM(fatture.importo) as somma_spese
+FROM fatture 
+GROUP BY EXTRACT(YEAR FROM data_fattura)
+ORDER BY anno
+
+ES.9
+
+SELECT EXTRACT(YEAR FROM data_fattura) AS anno, COUNT(*) AS numero_fatture
+FROM fatture
+WHERE tipologia ILIKE 'A'
+GROUP BY EXTRACT(YEAR FROM data_fattura)
+HAVING COUNT(*) > 2
+
+ES.10
+
+SELECT SUM(importo) AS somma_importi, clienti.regione_residenza
+FROM fatture
+JOIN clienti ON (clienti.pk_numero_cliente = fatture.fk_id_cliente)
+GROUP BY clienti.regione_residenza
+
+ES.11
+
+SELECT COUNT(DISTINCT pk_numero_cliente) as numero_clienti
+FROM clienti
+JOIN fatture ON fatture.fk_id_cliente = clienti.pk_numero_cliente
+WHERE anno_nascita = 1980
+AND CAST(fatture.importo as NUMERIC) >= 50 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
